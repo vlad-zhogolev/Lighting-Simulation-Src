@@ -1,0 +1,63 @@
+#ifndef MESH_H
+#define MESH_H
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "Shader.h"
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <vector>
+
+struct Vertex {
+    // position
+    glm::vec3 Position;
+    // normal
+    glm::vec3 Normal;
+    // texCoords
+    glm::vec2 TexCoords;   
+};
+
+struct Texture {
+    unsigned int id;
+    std::string type;
+    std::string path;
+};
+
+const int BLINN_PHONG = 4;
+
+class Mesh {
+public:
+   
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;    
+    // constructor
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+
+    // render the mesh
+    void Draw(Shader shader);
+    void setAmbient(glm::vec3 ambient) { this->ambient = ambient; }
+    void setDiffuse(glm::vec3 diffuse) { this->diffuse = diffuse; }
+    void setSpecular(glm::vec3 specular) { this->specular = specular; }
+    void setShininess(float shininess) { this->shininess = shininess; }
+    glm::vec3 getAmbient() { return ambient; }
+    glm::vec3 getDiffuse() { return diffuse; }
+    glm::vec3 getSpecular() { return specular; }
+    float getShininess() { return shininess; }
+
+private:    
+    unsigned int VAO, VBO, EBO;
+
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+    float shininess;
+    
+    // initializes all the buffer objects/arrays
+    void setupMesh();
+};
+#endif
+
